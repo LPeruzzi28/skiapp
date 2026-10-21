@@ -2,7 +2,7 @@
 // et colorée par pas de 3 h, avec les stations (favoris en étoile) par-dessus.
 
 const CLE_FAVORIS = "skiapp.favoris";
-const CLE_CACHE = "skiapp.grille";
+const CLE_CACHE = "skiapp.grille2";
 const DUREE_CACHE_MS = 60 * 60 * 1000; // 1 h
 const PAS_H = 3;
 const JOURS = 5;
@@ -44,9 +44,8 @@ let minuterie = null;
 
 const carte = L.map("carte", { zoomSnap: 0.25, zoomDelta: 0.5 })
   .fitBounds([[45.85, 6.0], [47.75, 10.45]]);
-L.tileLayer("https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png", {
-  attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/">CARTO</a> · <a href="https://open-meteo.com/">Open-Meteo</a>',
-  subdomains: "abcd",
+L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
+  attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> · <a href="https://open-meteo.com/">Open-Meteo</a>',
   maxZoom: 12,
 }).addTo(carte);
 carte.createPane("meteo").style.zIndex = 350;
@@ -68,7 +67,9 @@ async function demarrer() {
   }
   const curseur = document.getElementById("curseur");
   curseur.max = donnees.temps.length - 1;
-  curseur.value = 0;
+  // La neige cumulée s'ouvre sur le total des 5 jours.
+  etape = couche === "cumul" ? donnees.temps.length - 1 : 0;
+  curseur.value = etape;
   dessiner();
 }
 
@@ -113,8 +114,8 @@ async function chargerGrille() {
   // Neige cumulée depuis maintenant jusqu'à chaque pas.
   resultat.cumul = res.map(p => {
     let total = 0;
-    return indices.map((k, n) => {
-      if (n > 0) total += somme(p.hourly.snowfall, k);
+    return indices.map(k => {
+      total += somme(p.hourly.snowfall, k);
       return +total.toFixed(1);
     });
   });
