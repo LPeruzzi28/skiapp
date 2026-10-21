@@ -3,6 +3,7 @@
 
 const CLE_FAVORIS = "skiapp.favoris";
 const CLE_CACHE = "skiapp.grille2";
+const CLE_METEO = "skiapp.meteo"; // prévisions des stations, partagées avec la page Stations
 const DUREE_CACHE_MS = 60 * 60 * 1000; // 1 h
 const PAS_H = 3;
 const JOURS = 5;
@@ -34,6 +35,15 @@ const COUCHES = {
     echelle: [[-20, 120, 40, 160, 170], [-10, 40, 80, 220, 170], [-4, 90, 170, 250, 170], [0, 230, 240, 255, 170],
               [4, 140, 220, 120, 170], [10, 250, 220, 60, 170], [20, 240, 90, 40, 170]],
   },
+};
+
+const ICONES = {
+  0: "☀️", 1: "🌤️", 2: "⛅", 3: "☁️", 45: "🌫️", 48: "🌫️",
+  51: "🌦️", 53: "🌦️", 55: "🌦️", 56: "🌧️", 57: "🌧️",
+  61: "🌧️", 63: "🌧️", 65: "🌧️", 66: "🌧️", 67: "🌧️",
+  71: "🌨️", 73: "🌨️", 75: "❄️", 77: "🌨️",
+  80: "🌦️", 81: "🌧️", 82: "🌧️", 85: "🌨️", 86: "❄️",
+  95: "⛈️", 96: "⛈️", 99: "⛈️",
 };
 
 let donnees = null; // { temps: [...], neige: [[...]], pluie, temp } par point de grille
@@ -217,6 +227,8 @@ async function ajouterStations() {
     m.station = s;
     if (fav) m.bindTooltip("", { permanent: true, direction: "right", offset: [12, 0], className: "etiquette" });
     else m.bindTooltip("", { direction: "top" });
+    m.bindPopup(() => fiche(s), { className: "fiche", maxWidth: 240, minWidth: 210, autoPanPadding: [20, 20] });
+    m.on("popupopen", () => { if (!fav) m.closeTooltip(); });
     return m;
   });
   majInfobulles();
@@ -232,6 +244,53 @@ function majInfobulles() {
     }
     m.setTooltipContent(texte);
   }
+}
+
+// Mini-fiche d'une station au clic sur son point : météo au sommet en quelques chiffres.
+// Reprend les prévisions déjà chargées par la page Stations, sinon une petite requête.
+const previsions = {};
+function previsionStation(s) {
+  const cache = lire(CLE_METEO, null);
+  const haut = cache && Date.now() - cache.date < DUREE_CACHE_MS && cache.donnees?.[s.id]?.sommet;
+  if (haut?.daily) return Promise.resolve(haut);
+  previsions[s.id] ??= (async () => {
+    const params = new URLSearchParams({
+      latitude: s.lat, longitude: s.lon, elevation: s.alt_sommet,
+      current: "temperature_2m,weather_code,snow_depth",
+      daily: "weather_code,snowfall_sum",
+      timezone: "Europe/Zurich",
+      forecast_days: 7,
+    });
+    const rep = await fetch("https://api.open-meteo.com/v1/forecast?" + params);
+    if (!rep.ok) throw new Error("Open-Meteo " + rep.status);
+    return rep.json();
+  })().catch(e => { delete previsions[s.id]; throw e; });
+  return previsions[s.id];
+}
+
+function fiche(s) {
+  const el = document.createElement("div");
+  el.innerHTML = `
+    <div class="fiche-tete"><strong>${s.nom}</strong><span class="fiche-actuel"></span></div>
+    <p class="fiche-meta">${s.canton} · ${s.alt_base}–${s.alt_sommet} m</p>
+    <div class="fiche-chiffres"><span class="charge">Chargement…</span></div>
+    <a class="fiche-lien" href="./#${s.id}">Voir la station →</a>`;
+  previsionStation(s).then(h => {
+    const somme = n => h.daily.snowfall_sum.slice(0, n).reduce((a, b) => a + (b ?? 0), 0);
+    const cm = v => (v < 0.5 ? 0 : Math.round(v));
+    const sol = h.current?.snow_depth;
+    if (h.current) {
+      el.querySelector(".fiche-actuel").textContent =
+        `${ICONES[h.current.weather_code] ?? ""} ${Math.round(h.current.temperature_2m)}°`;
+    }
+    el.querySelector(".fiche-chiffres").innerHTML = [
+      ["24 h", cm(somme(1))], ["3 j", cm(somme(3))], ["7 j", cm(somme(7))],
+      ["Au sol", sol != null ? Math.round(sol * 100) : "–"],
+    ].map(([nom, v]) => `<span><b>${v}</b>${nom}</span>`).join("");
+  }).catch(() => {
+    el.querySelector(".fiche-chiffres").innerHTML = `<span class="charge">Prévisions indisponibles</span>`;
+  });
+  return el;
 }
 
 document.querySelectorAll(".couches button").forEach(b => b.addEventListener("click", () => {

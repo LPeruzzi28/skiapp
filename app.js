@@ -41,6 +41,17 @@ async function demarrer() {
     err.hidden = false;
     document.getElementById("maj").textContent = "Prévisions indisponibles";
   }
+  allerAStation();
+}
+
+// Arrivée depuis la carte (lien « ./#zermatt ») : on descend jusqu'à la station et on la fait ressortir.
+function allerAStation() {
+  const id = decodeURIComponent(location.hash.slice(1));
+  const art = id && document.querySelector(`.station[data-id="${CSS.escape(id)}"]`);
+  if (!art) return;
+  art.scrollIntoView({ behavior: "smooth", block: "start" });
+  art.classList.add("ciblee");
+  setTimeout(() => art.classList.remove("ciblee"), 2000);
 }
 
 // Une seule requête pour toutes les stations : chaque station est demandée deux fois,
@@ -177,6 +188,7 @@ function carte(s) {
     art.style.setProperty("--i", Math.min(rang++, 12));
   }
   art.station = s;
+  art.dataset.id = s.id;
   if (window.CONFIG?.windyKey) observateurCams.observe(art);
   return art;
 }

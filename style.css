@@ -136,6 +136,9 @@ h2 {
 .station.entree { animation: entree .6s var(--sortie) both; animation-delay: calc(var(--i, 0) * 50ms); }
 @keyframes entree { from { opacity: 0; transform: translateY(22px) rotate(-1deg); } }
 .station.favori { box-shadow: 5px 5px 0 var(--rouge); }
+.station.ciblee { animation: ciblee 1s var(--ressort) 2; }
+.station[data-id] { scroll-margin-top: 80px; }
+@keyframes ciblee { 50% { transform: translate(-3px, -3px) rotate(-.6deg); box-shadow: 9px 9px 0 var(--rouge); } }
 @media (hover: hover) { .station.favori:hover { box-shadow: 7px 7px 0 var(--rouge); } }
 
 .entete { display: flex; align-items: center; gap: 10px; }
@@ -301,6 +304,22 @@ footer { color: var(--pale); font-size: .75rem; padding: 28px 16px; text-align: 
 }
 .leaflet-tooltip.etiquette { font-weight: 700; font-size: .72rem; padding: 2px 7px; border: 2px solid var(--encre); border-radius: 8px; box-shadow: 2px 2px 0 var(--encre); color: var(--encre); background: var(--carte); }
 .leaflet-container { background: var(--papier-2); font-family: inherit; }
+/* Mini-fiche d'une station sur la carte */
+.fiche .leaflet-popup-content-wrapper { background: var(--carte); color: var(--encre); border: var(--trait); border-radius: 12px; box-shadow: 4px 4px 0 var(--rouge); }
+.fiche .leaflet-popup-content { margin: 10px 12px; font-size: .8rem; line-height: 1.3; }
+.fiche .leaflet-popup-tip { background: var(--carte); border: var(--trait); box-shadow: none; }
+.fiche .leaflet-popup-close-button { display: none; }
+.fiche-tete { display: flex; align-items: baseline; justify-content: space-between; gap: 8px; }
+.fiche-tete strong { font-family: var(--titre); font-weight: 400; font-size: 1.35rem; line-height: 1; letter-spacing: .03em; }
+.fiche-actuel { font-family: var(--titre); font-size: 1.25rem; white-space: nowrap; }
+.fiche .fiche-meta { margin: 2px 0 8px; color: var(--doux); font-size: .72rem; }
+.fiche-chiffres { display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px; min-height: 40px; }
+.fiche-chiffres span { text-align: center; border: 2px solid var(--encre); border-radius: 8px; padding: 2px 0; font-size: .58rem; font-weight: 700; text-transform: uppercase; letter-spacing: .04em; color: var(--doux); }
+.fiche-chiffres span:first-child { background: var(--encre); color: #8ec5ff; }
+.fiche-chiffres b { display: block; font-family: var(--titre); font-weight: 400; font-size: 1.15rem; color: var(--encre); letter-spacing: .02em; }
+.fiche-chiffres span:first-child b { color: var(--clair); }
+.fiche-chiffres .charge { grid-column: 1 / -1; border: 0; background: none !important; color: var(--doux) !important; text-transform: none; font-weight: 500; font-size: .75rem; }
+.fiche .fiche-lien { display: inline-block; margin-top: 8px; color: var(--rouge); font-weight: 700; font-size: .72rem; text-transform: uppercase; letter-spacing: .06em; text-decoration: none; }
 .leaflet-bar { border: var(--trait) !important; box-shadow: var(--ombre-basse) !important; }
 
 @media (prefers-reduced-motion: reduce) {
