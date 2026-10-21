@@ -162,9 +162,60 @@ function carte(s) {
     art.querySelector(".detail").innerHTML = tableau(s, m);
   } else {
     art.querySelector(".resume").innerHTML = `<span class="charge">Prévisions en cours de chargement…</span>`;
-    art.querySelector("details").hidden = true;
+    art.querySelector("details.det").hidden = true;
   }
+  const cams = art.querySelector("details.cams");
+  cams.addEventListener("toggle", () => {
+    if (cams.open && !cams.dataset.charge) {
+      cams.dataset.charge = "1";
+      afficherWebcams(s, cams.querySelector(".cams-liste"));
+    }
+  });
   return art;
+}
+
+// Webcams Windy à moins de 8 km de la station, chargées à l'ouverture du bloc.
+// Les liens d'image Windy expirent : on ne les met jamais en cache.
+const webcamsCache = {};
+async function chargerWebcams(s) {
+  if (webcamsCache[s.id]) return webcamsCache[s.id];
+  const params = new URLSearchParams({
+    nearby: `${s.lat},${s.lon},8`,
+    include: "images,urls,location",
+    limit: 8,
+  });
+  const rep = await fetch("https://api.windy.com/webcams/api/v3/webcams?" + params, {
+    headers: { "x-windy-api-key": window.CONFIG?.windyKey },
+  });
+  if (!rep.ok) throw new Error("Windy " + rep.status);
+  const { webcams = [] } = await rep.json();
+  return (webcamsCache[s.id] = webcams.filter(w => w.status === "active" && w.images?.current?.preview));
+}
+
+async function afficherWebcams(s, el) {
+  const lienCarte = `https://www.windy.com/webcams?${s.lat},${s.lon},12`;
+  if (!window.CONFIG?.windyKey) {
+    el.innerHTML = `<p class="cam-info"><a href="${lienCarte}" target="_blank" rel="noopener">Voir les webcams autour de ${s.nom} sur Windy</a></p>`;
+    return;
+  }
+  el.innerHTML = `<p class="cam-info">Chargement des webcams…</p>`;
+  try {
+    const cams = await chargerWebcams(s);
+    if (!cams.length) {
+      el.innerHTML = `<p class="cam-info">Aucune webcam trouvée près de la station.</p>`;
+      return;
+    }
+    el.innerHTML = cams.map(w => {
+      const img = w.images.current.preview;
+      const maj = new Date(w.lastUpdatedOn).toLocaleString("fr-CH", { weekday: "short", hour: "2-digit", minute: "2-digit" });
+      return `<a class="cam" href="${w.urls?.detail ?? lienCarte}" target="_blank" rel="noopener">
+        <img src="${img}" alt="" loading="lazy">
+        <span>${w.title}${w.lastUpdatedOn ? ` · ${maj}` : ""}</span>
+      </a>`;
+    }).join("") + `<p class="cam-credit">Webcams fournies par <a href="https://www.windy.com/" target="_blank" rel="noopener">Windy.com</a></p>`;
+  } catch {
+    el.innerHTML = `<p class="cam-info">Webcams indisponibles. <a href="${lienCarte}" target="_blank" rel="noopener">Les voir sur Windy</a></p>`;
+  }
 }
 
 function tableau(s, m) {
