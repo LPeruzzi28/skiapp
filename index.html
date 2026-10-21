@@ -49,6 +49,13 @@
     (modèles MétéoSuisse et autres). La hauteur de neige vient du modèle météo, pas des stations.
   </footer>
 
+  <div class="visionneuse" id="visionneuse" hidden>
+    <figure>
+      <img alt="">
+      <figcaption></figcaption>
+    </figure>
+  </div>
+
   <template id="tpl-station">
     <article class="station">
       <div class="entete">
@@ -61,10 +68,7 @@
       </div>
       <div class="resume"></div>
       <div class="jours"></div>
-      <details class="cams">
-        <summary>📷 Webcams</summary>
-        <div class="cams-liste"></div>
-      </details>
+      <div class="cams-liste" hidden></div>
       <details class="det">
         <summary>Village et sommet</summary>
         <table class="detail"></table>

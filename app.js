@@ -164,59 +164,81 @@ function carte(s) {
     art.querySelector(".resume").innerHTML = `<span class="charge">Prévisions en cours de chargement…</span>`;
     art.querySelector("details.det").hidden = true;
   }
-  const cams = art.querySelector("details.cams");
-  cams.addEventListener("toggle", () => {
-    if (cams.open && !cams.dataset.charge) {
-      cams.dataset.charge = "1";
-      afficherWebcams(s, cams.querySelector(".cams-liste"));
-    }
-  });
+  art.station = s;
+  if (window.CONFIG?.windyKey) observateurCams.observe(art);
   return art;
 }
 
-// Webcams Windy à moins de 8 km de la station, chargées à l'ouverture du bloc.
-// Les liens d'image Windy expirent : on ne les met jamais en cache.
+// Webcams Windy à moins de 8 km de la station, chargées quand la carte de la station
+// devient visible. Les liens d'image Windy expirent : on ne les garde que le temps de la visite.
 const webcamsCache = {};
-async function chargerWebcams(s) {
-  if (webcamsCache[s.id]) return webcamsCache[s.id];
-  const params = new URLSearchParams({
-    nearby: `${s.lat},${s.lon},8`,
-    include: "images,urls,location",
-    limit: 8,
-  });
-  const rep = await fetch("https://api.windy.com/webcams/api/v3/webcams?" + params, {
-    headers: { "x-windy-api-key": window.CONFIG?.windyKey },
-  });
-  if (!rep.ok) throw new Error("Windy " + rep.status);
-  const { webcams = [] } = await rep.json();
-  return (webcamsCache[s.id] = webcams.filter(w => w.status === "active" && w.images?.current?.preview));
+const observateurCams = "IntersectionObserver" in window
+  ? new IntersectionObserver(entrees => {
+      for (const e of entrees) {
+        if (!e.isIntersecting) continue;
+        observateurCams.unobserve(e.target);
+        afficherWebcams(e.target.station, e.target.querySelector(".cams-liste"));
+      }
+    }, { rootMargin: "200px" })
+  : { observe: art => afficherWebcams(art.station, art.querySelector(".cams-liste")) };
+
+// Une seule requête par station, même si elle apparaît dans les favoris et dans la liste.
+function chargerWebcams(s) {
+  webcamsCache[s.id] ??= (async () => {
+    const params = new URLSearchParams({
+      nearby: `${s.lat},${s.lon},8`,
+      include: "images,urls,location",
+      limit: 8,
+    });
+    const rep = await fetch("https://api.windy.com/webcams/api/v3/webcams?" + params, {
+      headers: { "x-windy-api-key": window.CONFIG.windyKey },
+    });
+    if (!rep.ok) throw new Error("Windy " + rep.status);
+    const { webcams = [] } = await rep.json();
+    return webcams.filter(w => w.status === "active" && w.images?.current?.preview);
+  })();
+  return webcamsCache[s.id];
 }
 
 async function afficherWebcams(s, el) {
-  const lienCarte = `https://www.windy.com/webcams?${s.lat},${s.lon},12`;
-  if (!window.CONFIG?.windyKey) {
-    el.innerHTML = `<p class="cam-info"><a href="${lienCarte}" target="_blank" rel="noopener">Voir les webcams autour de ${s.nom} sur Windy</a></p>`;
+  let cams;
+  try {
+    cams = await chargerWebcams(s);
+  } catch {
     return;
   }
-  el.innerHTML = `<p class="cam-info">Chargement des webcams…</p>`;
-  try {
-    const cams = await chargerWebcams(s);
-    if (!cams.length) {
-      el.innerHTML = `<p class="cam-info">Aucune webcam trouvée près de la station.</p>`;
-      return;
-    }
-    el.innerHTML = cams.map(w => {
-      const img = w.images.current.preview;
-      const maj = new Date(w.lastUpdatedOn).toLocaleString("fr-CH", { weekday: "short", hour: "2-digit", minute: "2-digit" });
-      return `<a class="cam" href="${w.urls?.detail ?? lienCarte}" target="_blank" rel="noopener">
-        <img src="${img}" alt="" loading="lazy">
-        <span>${w.title}${w.lastUpdatedOn ? ` · ${maj}` : ""}</span>
-      </a>`;
-    }).join("") + `<p class="cam-credit">Webcams fournies par <a href="https://www.windy.com/" target="_blank" rel="noopener">Windy.com</a></p>`;
-  } catch {
-    el.innerHTML = `<p class="cam-info">Webcams indisponibles. <a href="${lienCarte}" target="_blank" rel="noopener">Les voir sur Windy</a></p>`;
-  }
+  if (!cams.length) return;
+  el.replaceChildren(...cams.map(w => {
+    const bouton = document.createElement("button");
+    bouton.type = "button";
+    bouton.className = "cam";
+    const img = document.createElement("img");
+    img.src = w.images.current.preview;
+    img.alt = w.title;
+    img.loading = "lazy";
+    const legende = document.createElement("span");
+    legende.textContent = w.title;
+    bouton.append(img, legende);
+    bouton.addEventListener("click", () => ouvrirCam(w));
+    return bouton;
+  }));
+  const credit = document.createElement("p");
+  credit.className = "cam-credit";
+  credit.innerHTML = `📷 Webcams <a href="https://www.windy.com/" target="_blank" rel="noopener">Windy.com</a>`;
+  el.append(credit);
+  el.hidden = false;
 }
+
+function ouvrirCam(w) {
+  const v = document.getElementById("visionneuse");
+  v.querySelector("img").src = w.images.current.preview;
+  const maj = w.lastUpdatedOn
+    ? " · " + new Date(w.lastUpdatedOn).toLocaleString("fr-CH", { weekday: "short", hour: "2-digit", minute: "2-digit" })
+    : "";
+  v.querySelector("figcaption").textContent = w.title + maj;
+  v.hidden = false;
+}
+document.getElementById("visionneuse").addEventListener("click", e => { e.currentTarget.hidden = true; });
 
 function tableau(s, m) {
   const ligne = (nom, alt, d) => {
