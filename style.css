@@ -106,11 +106,7 @@ footer a { color: var(--accent); }
 .couches button.actif { background: var(--accent); border-color: var(--accent); color: #fff; }
 #carte { flex: 1; min-height: 300px; }
 .temps { display: flex; align-items: center; gap: 10px; padding: 8px 16px; background: var(--fond); }
-.temps button {
-  border: 0; border-radius: 50%; width: 36px; height: 36px; flex: none;
-  background: var(--accent); color: #fff; font-size: 1rem; cursor: pointer;
-}
-.temps input { flex: 1; min-width: 0; }
+.temps input { flex: 1; min-width: 0; height: 28px; accent-color: var(--accent); }
 #moment { font-size: .85rem; min-width: 92px; text-align: right; text-transform: capitalize; }
 .legende { padding: 0 16px calc(10px + env(safe-area-inset-bottom)); background: var(--fond); }
 .degrade { height: 10px; border-radius: 5px; }
