@@ -17,6 +17,8 @@ const ICONES = {
 let stations = [];
 let meteo = {}; // id -> { sommet, village }
 let favoris = new Set(lire(CLE_FAVORIS, []));
+let animerEntree = false; // vrai seulement pour le rendu qui suit l'arrivée des prévisions
+let dernierFavori = null; // station dont l'étoile vient d'être touchée, pour l'animer
 
 function lire(cle, defaut) {
   try { return JSON.parse(localStorage.getItem(cle)) ?? defaut; } catch { return defaut; }
@@ -30,7 +32,9 @@ async function demarrer() {
   afficher();
   try {
     meteo = await chargerMeteo();
+    animerEntree = true;
     afficher();
+    animerEntree = false;
   } catch (e) {
     const err = document.getElementById("erreur");
     err.textContent = "Impossible de charger les prévisions. Vérifie ta connexion et recharge la page.";
@@ -110,7 +114,9 @@ function comparateur(tri) {
   }
 }
 
+let rang = 0;
 function remplir(idListe, liste) {
+  rang = 0;
   const el = document.getElementById(idListe);
   el.replaceChildren(...liste.map(carte));
 }
@@ -125,6 +131,8 @@ function carte(s) {
   const btn = art.querySelector(".fav");
   btn.textContent = fav ? "★" : "☆";
   btn.classList.toggle("actif", fav);
+  btn.classList.toggle("pop", s.id === dernierFavori);
+  art.classList.toggle("favori", fav);
   btn.setAttribute("aria-label", fav ? "Retirer des favoris" : "Ajouter aux favoris");
   btn.addEventListener("click", () => basculerFavori(s.id));
 
@@ -144,7 +152,7 @@ function carte(s) {
       bulle("Aujourd'hui", cm(n24)),
       bulle("3 jours", cm(n3)),
       bulle("7 jours", cm(n7)),
-      bulle("Neige au sol", hauteur != null ? Math.round(hauteur * 100) + " cm" : "–"),
+      bulle("Au sol", hauteur != null ? Math.round(hauteur * 100) + " cm" : "–"),
     ].join("");
 
     const max = Math.max(10, ...haut.daily.snowfall_sum);
@@ -163,6 +171,10 @@ function carte(s) {
   } else {
     art.querySelector(".resume").innerHTML = `<span class="charge">Prévisions en cours de chargement…</span>`;
     art.querySelector("details.det").hidden = true;
+  }
+  if (animerEntree) {
+    art.classList.add("entree");
+    art.style.setProperty("--i", Math.min(rang++, 12));
   }
   art.station = s;
   if (window.CONFIG?.windyKey) observateurCams.observe(art);
@@ -235,9 +247,15 @@ async function afficherWebcams(s, el) {
       if (!defile.children.length) el.hidden = true;
     });
     img.src = w.images.current.preview;
+    const cadre = document.createElement("span");
+    cadre.className = "cadre";
+    const direct = document.createElement("span");
+    direct.className = "direct";
+    direct.textContent = "Live";
+    cadre.append(img, direct);
     const legende = document.createElement("span");
     legende.textContent = titre;
-    bouton.append(img, legende);
+    bouton.append(cadre, legende);
     bouton.addEventListener("click", () => ouvrirCam(w, titre));
     defile.append(bouton);
   }
@@ -283,9 +301,11 @@ function cm(v) {
 }
 
 function basculerFavori(id) {
+  dernierFavori = id;
   favoris.has(id) ? favoris.delete(id) : favoris.add(id);
   ecrire(CLE_FAVORIS, [...favoris]);
   afficher();
+  dernierFavori = null;
 }
 
 document.getElementById("recherche").addEventListener("input", afficher);

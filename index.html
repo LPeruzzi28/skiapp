@@ -5,20 +5,30 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <title>Ski Suisse</title>
   <meta name="description" content="Neige et météo des stations de ski suisses, avec tes favoris.">
-  <meta name="theme-color" content="#0b1d33">
+  <meta name="theme-color" content="#f2b84b">
   <link rel="manifest" href="manifest.webmanifest">
   <link rel="icon" href="icon.svg" type="image/svg+xml">
   <link rel="apple-touch-icon" href="icon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,700&display=swap">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <header class="top">
-    <h1>❄️ Ski Suisse</h1>
+    <h1>Ski Suisse</h1>
     <p class="sub" id="maj">Chargement des prévisions…</p>
     <nav class="onglets">
       <a href="./" aria-current="page">Stations</a>
       <a href="carte.html">Carte</a>
     </nav>
+    <svg class="soleil" viewBox="0 0 100 100" aria-hidden="true"><circle cx="50" cy="50" r="50"/></svg>
+    <svg class="montagnes" viewBox="0 0 1200 140" preserveAspectRatio="xMidYMax slice" aria-hidden="true">
+      <path d="M0 140 L0 90 L150 30 L260 80 L400 10 L520 70 L640 35 L760 85 L900 20 L1030 75 L1200 40 L1200 140 Z" fill="#3f8f8a"/>
+      <path d="M0 140 L0 110 L120 70 L230 105 L360 50 L470 100 L600 60 L720 108 L850 55 L980 100 L1100 72 L1200 95 L1200 140 Z" fill="#1d3557"/>
+      <path d="M360 50 L330 64 L346 66 L360 58 L376 68 L392 62 Z M850 55 L822 68 L838 70 L850 62 L866 72 L880 66 Z M600 60 L578 72 L592 72 L604 66 L616 74 Z M120 70 L100 82 L114 82 L124 76 L136 84 Z" fill="#f5ecd7"/>
+      <path d="M0 140 L0 128 L200 112 L420 130 L640 114 L860 132 L1060 116 L1200 126 L1200 140 Z" fill="#f5ecd7"/>
+    </svg>
   </header>
 
   <div class="outils">
