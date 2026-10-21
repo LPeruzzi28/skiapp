@@ -1,6 +1,6 @@
 // Garde l'app utilisable hors ligne : fichiers de l'app en cache, réseau en priorité.
-const CACHE = "skiapp-v1";
-const FICHIERS = ["./", "index.html", "style.css", "app.js", "stations.json", "icon.svg", "manifest.webmanifest"];
+const CACHE = "skiapp-v2";
+const FICHIERS = ["./", "index.html", "style.css", "app.js", "stations.json", "icon.svg", "manifest.webmanifest", "carte.html", "carte.js"];
 
 self.addEventListener("install", e => {
   e.waitUntil(caches.open(CACHE).then(c => c.addAll(FICHIERS)));
