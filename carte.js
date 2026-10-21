@@ -40,10 +40,19 @@ let donnees = null; // { temps: [...], neige: [[...]], pluie, temp } par point d
 let couche = "cumul";
 let etape = 0;
 let calque = null;
-let minuterie = null;
 
-const carte = L.map("carte", { zoomSnap: 0.25, zoomDelta: 0.5 })
-  .fitBounds([[45.85, 6.0], [47.75, 10.45]]);
+// La carte reste dans la zone couverte par la grille : impossible de dézoomer
+// ou de glisser là où il n'y a pas de prévisions.
+const ZONE = L.latLngBounds([[GRILLE.latMin, GRILLE.lonMin], [GRILLE.latMax, GRILLE.lonMax]]);
+const carte = L.map("carte", { zoomSnap: 0.25, zoomDelta: 0.5, maxBounds: ZONE, maxBoundsViscosity: 1 });
+function limiterZoom() {
+  const min = carte.getBoundsZoom(ZONE, true);
+  carte.setMinZoom(min);
+  if (carte.getZoom() < min) carte.setZoom(min);
+}
+carte.setView(ZONE.getCenter(), carte.getBoundsZoom(ZONE, true));
+limiterZoom();
+carte.on("resize", limiterZoom);
 L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
   attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> · <a href="https://open-meteo.com/">Open-Meteo</a>',
   maxZoom: 12,
@@ -234,20 +243,6 @@ document.querySelectorAll(".couches button").forEach(b => b.addEventListener("cl
 document.getElementById("curseur").addEventListener("input", e => {
   etape = +e.target.value;
   dessiner();
-});
-
-document.getElementById("lecture").addEventListener("click", e => {
-  const btn = e.currentTarget;
-  if (minuterie) {
-    clearInterval(minuterie); minuterie = null; btn.textContent = "▶"; return;
-  }
-  if (!donnees) return;
-  btn.textContent = "⏸";
-  minuterie = setInterval(() => {
-    etape = (etape + 1) % donnees.temps.length;
-    document.getElementById("curseur").value = etape;
-    dessiner();
-  }, 700);
 });
 
 demarrer();

@@ -1,5 +1,5 @@
 // Garde l'app utilisable hors ligne : fichiers de l'app en cache, réseau en priorité.
-const CACHE = "skiapp-v3";
+const CACHE = "skiapp-v4";
 const FICHIERS = ["./", "index.html", "style.css", "app.js", "stations.json", "icon.svg", "manifest.webmanifest", "carte.html", "carte.js"];
 
 self.addEventListener("install", e => {
