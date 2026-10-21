@@ -121,3 +121,11 @@ footer a { color: var(--accent); }
   line-height: 22px; font-size: 15px;
 }
 .leaflet-tooltip.etiquette { font-weight: 600; font-size: .7rem; padding: 1px 5px; }
+
+/* Webcams */
+.cams-liste { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px; margin-top: 6px; }
+.cam { display: block; text-decoration: none; color: var(--texte); }
+.cam img { width: 100%; aspect-ratio: 16 / 9; object-fit: cover; border-radius: 8px; background: var(--fond); display: block; }
+.cam span { display: block; font-size: .7rem; color: var(--doux); margin-top: 2px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.cam-info, .cam-credit { grid-column: 1 / -1; margin: 4px 0; font-size: .8rem; color: var(--doux); }
+.cam-info a, .cam-credit a { color: var(--accent); }
