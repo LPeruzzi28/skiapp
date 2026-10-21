@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Carte · Ski Suisse</title>
+  <meta name="theme-color" content="#0b1d33">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="icon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="icon.svg">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="page-carte">
+  <header class="top">
+    <h1>❄️ Ski Suisse</h1>
+    <nav class="onglets">
+      <a href="./">Stations</a>
+      <a href="carte.html" aria-current="page">Carte</a>
+    </nav>
+  </header>
+
+  <div class="couches" role="tablist">
+    <button type="button" data-couche="cumul" class="actif">Neige cumulée</button>
+    <button type="button" data-couche="neige">Neige 3 h</button>
+    <button type="button" data-couche="pluie">Précipitations</button>
+    <button type="button" data-couche="temp">Température</button>
+  </div>
+
+  <div id="carte"></div>
+
+  <div class="temps">
+    <button type="button" id="lecture" aria-label="Lecture">▶</button>
+    <input type="range" id="curseur" min="0" max="0" value="0" aria-label="Moment de la prévision">
+    <span id="moment">Chargement…</span>
+  </div>
+  <div class="legende" id="legende"></div>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="carte.js"></script>
+</body>
+</html>

@@ -86,3 +86,42 @@ summary { cursor: pointer; color: var(--accent); }
 .erreur { color: #d33; }
 footer { color: var(--doux); font-size: .75rem; padding: 24px 16px; text-align: center; }
 footer a { color: var(--accent); }
+
+/* Onglets */
+.onglets { display: flex; gap: 6px; margin-top: 12px; }
+.onglets a {
+  color: #fff; text-decoration: none; padding: 6px 14px; border-radius: 999px;
+  background: rgba(255,255,255,.12); font-size: .9rem;
+}
+.onglets a[aria-current="page"] { background: #fff; color: #0b1d33; font-weight: 600; }
+
+/* Page carte */
+.page-carte { display: flex; flex-direction: column; height: 100dvh; }
+.page-carte .top { padding-bottom: 12px; }
+.couches { display: flex; gap: 6px; padding: 8px 16px; overflow-x: auto; background: var(--fond); }
+.couches button {
+  font: inherit; font-size: .85rem; white-space: nowrap; padding: 6px 12px; border-radius: 999px;
+  border: 1px solid var(--bord); background: var(--carte); color: var(--texte); cursor: pointer;
+}
+.couches button.actif { background: var(--accent); border-color: var(--accent); color: #fff; }
+#carte { flex: 1; min-height: 300px; }
+.temps { display: flex; align-items: center; gap: 10px; padding: 8px 16px; background: var(--fond); }
+.temps button {
+  border: 0; border-radius: 50%; width: 36px; height: 36px; flex: none;
+  background: var(--accent); color: #fff; font-size: 1rem; cursor: pointer;
+}
+.temps input { flex: 1; min-width: 0; }
+#moment { font-size: .85rem; min-width: 92px; text-align: right; text-transform: capitalize; }
+.legende { padding: 0 16px calc(10px + env(safe-area-inset-bottom)); background: var(--fond); }
+.degrade { height: 10px; border-radius: 5px; }
+.graduations { display: flex; justify-content: space-between; font-size: .7rem; color: var(--doux); margin-top: 2px; }
+.graduations .u { font-weight: 600; }
+.pin {
+  display: block; width: 12px; height: 12px; border-radius: 50%;
+  background: #0b1d33; border: 2px solid #fff; box-shadow: 0 0 2px rgba(0,0,0,.5);
+}
+.pin-fav {
+  width: 26px; height: 26px; background: #f5b301; color: #fff; text-align: center;
+  line-height: 22px; font-size: 15px;
+}
+.leaflet-tooltip.etiquette { font-weight: 600; font-size: .7rem; padding: 1px 5px; }
