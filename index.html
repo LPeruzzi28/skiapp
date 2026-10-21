@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Ski Suisse</title>
+  <meta name="description" content="Neige et météo des stations de ski suisses, avec tes favoris.">
+  <meta name="theme-color" content="#0b1d33">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="icon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="icon.svg">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="top">
+    <h1>❄️ Ski Suisse</h1>
+    <p class="sub" id="maj">Chargement des prévisions…</p>
+  </header>
+
+  <div class="outils">
+    <input id="recherche" type="search" placeholder="Rechercher une station" autocomplete="off">
+    <select id="tri" aria-label="Trier">
+      <option value="neige3">Plus de neige (3 j)</option>
+      <option value="neige7">Plus de neige (7 j)</option>
+      <option value="nom">Nom</option>
+      <option value="altitude">Altitude</option>
+    </select>
+  </div>
+
+  <main>
+    <section id="bloc-favoris">
+      <h2>⭐ Mes favoris</h2>
+      <p class="vide" id="favoris-vide">Touche l'étoile d'une station pour l'ajouter ici.</p>
+      <div class="liste" id="liste-favoris"></div>
+    </section>
+    <section>
+      <h2>Toutes les stations</h2>
+      <div class="liste" id="liste-toutes"></div>
+    </section>
+    <p class="erreur" id="erreur" hidden></p>
+  </main>
+
+  <footer>
+    Prévisions <a href="https://open-meteo.com/" target="_blank" rel="noopener">Open-Meteo</a>
+    (modèles MétéoSuisse et autres). La hauteur de neige vient du modèle météo, pas des stations.
+  </footer>
+
+  <template id="tpl-station">
+    <article class="station">
+      <div class="entete">
+        <button class="fav" type="button" aria-label="Ajouter aux favoris">☆</button>
+        <div class="titre">
+          <h3></h3>
+          <p class="meta"></p>
+        </div>
+        <div class="actuel"></div>
+      </div>
+      <div class="resume"></div>
+      <div class="jours"></div>
+      <details>
+        <summary>Village et sommet</summary>
+        <table class="detail"></table>
+      </details>
+    </article>
+  </template>
+
+  <script src="app.js"></script>
+</body>
+</html>

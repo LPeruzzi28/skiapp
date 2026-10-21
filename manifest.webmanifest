@@ -1,0 +1,11 @@
+{
+  "name": "Ski Suisse",
+  "short_name": "Ski Suisse",
+  "description": "Neige et météo des stations de ski suisses, avec tes favoris.",
+  "start_url": ".",
+  "display": "standalone",
+  "background_color": "#0b1d33",
+  "theme_color": "#0b1d33",
+  "lang": "fr",
+  "icons": [{ "src": "icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" }]
+}
