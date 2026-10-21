@@ -193,9 +193,9 @@ function chargerWebcams(s) {
     const rep = await fetch("https://api.windy.com/webcams/api/v3/webcams?" + params, {
       headers: { "x-windy-api-key": window.CONFIG.windyKey },
     });
-    if (!rep.ok) throw new Error("Windy " + rep.status);
+    if (!rep.ok) throw new Error(`Windy a répondu ${rep.status} ${(await rep.text()).slice(0, 120)}`);
     const { webcams = [] } = await rep.json();
-    return webcams.filter(w => w.status === "active" && w.images?.current?.preview);
+    return webcams.filter(w => w.status !== "inactive" && w.images?.current?.preview);
   })();
   return webcamsCache[s.id];
 }
@@ -204,7 +204,11 @@ async function afficherWebcams(s, el) {
   let cams;
   try {
     cams = await chargerWebcams(s);
-  } catch {
+  } catch (e) {
+    // Visible dans la carte pour pouvoir diagnostiquer un problème de clé depuis un téléphone.
+    el.innerHTML = `<p class="cam-erreur"></p>`;
+    el.firstChild.textContent = "Webcams indisponibles : " + (e.message || "erreur réseau (CORS ou domaine refusé)");
+    el.hidden = false;
     return;
   }
   if (!cams.length) return;
