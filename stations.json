@@ -1,0 +1,290 @@
+[
+ {
+  "id": "zermatt",
+  "nom": "Zermatt",
+  "canton": "VS",
+  "lat": 46.02,
+  "lon": 7.749,
+  "alt_base": 1620,
+  "alt_sommet": 3883
+ },
+ {
+  "id": "saas-fee",
+  "nom": "Saas-Fee",
+  "canton": "VS",
+  "lat": 46.108,
+  "lon": 7.928,
+  "alt_base": 1800,
+  "alt_sommet": 3600
+ },
+ {
+  "id": "verbier",
+  "nom": "Verbier (4 Vallées)",
+  "canton": "VS",
+  "lat": 46.096,
+  "lon": 7.228,
+  "alt_base": 1500,
+  "alt_sommet": 3330
+ },
+ {
+  "id": "nendaz",
+  "nom": "Nendaz (4 Vallées)",
+  "canton": "VS",
+  "lat": 46.187,
+  "lon": 7.293,
+  "alt_base": 1400,
+  "alt_sommet": 3330
+ },
+ {
+  "id": "crans-montana",
+  "nom": "Crans-Montana",
+  "canton": "VS",
+  "lat": 46.311,
+  "lon": 7.481,
+  "alt_base": 1500,
+  "alt_sommet": 3000
+ },
+ {
+  "id": "grimentz-zinal",
+  "nom": "Grimentz-Zinal",
+  "canton": "VS",
+  "lat": 46.179,
+  "lon": 7.576,
+  "alt_base": 1570,
+  "alt_sommet": 2900
+ },
+ {
+  "id": "aletsch-arena",
+  "nom": "Aletsch Arena",
+  "canton": "VS",
+  "lat": 46.379,
+  "lon": 8.026,
+  "alt_base": 1925,
+  "alt_sommet": 2869
+ },
+ {
+  "id": "belalp",
+  "nom": "Belalp",
+  "canton": "VS",
+  "lat": 46.371,
+  "lon": 7.979,
+  "alt_base": 1320,
+  "alt_sommet": 3112
+ },
+ {
+  "id": "champery",
+  "nom": "Champéry (Portes du Soleil)",
+  "canton": "VS",
+  "lat": 46.177,
+  "lon": 6.87,
+  "alt_base": 1050,
+  "alt_sommet": 2466
+ },
+ {
+  "id": "villars-gryon",
+  "nom": "Villars-Gryon",
+  "canton": "VD",
+  "lat": 46.298,
+  "lon": 7.055,
+  "alt_base": 1300,
+  "alt_sommet": 2120
+ },
+ {
+  "id": "leysin",
+  "nom": "Leysin",
+  "canton": "VD",
+  "lat": 46.343,
+  "lon": 7.012,
+  "alt_base": 1260,
+  "alt_sommet": 2205
+ },
+ {
+  "id": "les-diablerets",
+  "nom": "Les Diablerets / Glacier 3000",
+  "canton": "VD",
+  "lat": 46.349,
+  "lon": 7.159,
+  "alt_base": 1150,
+  "alt_sommet": 3000
+ },
+ {
+  "id": "gstaad",
+  "nom": "Gstaad",
+  "canton": "BE",
+  "lat": 46.475,
+  "lon": 7.286,
+  "alt_base": 1050,
+  "alt_sommet": 2979
+ },
+ {
+  "id": "adelboden-lenk",
+  "nom": "Adelboden-Lenk",
+  "canton": "BE",
+  "lat": 46.492,
+  "lon": 7.56,
+  "alt_base": 1068,
+  "alt_sommet": 2362
+ },
+ {
+  "id": "grindelwald-wengen",
+  "nom": "Grindelwald-Wengen",
+  "canton": "BE",
+  "lat": 46.624,
+  "lon": 8.041,
+  "alt_base": 943,
+  "alt_sommet": 2971
+ },
+ {
+  "id": "murren-schilthorn",
+  "nom": "Mürren-Schilthorn",
+  "canton": "BE",
+  "lat": 46.559,
+  "lon": 7.892,
+  "alt_base": 1638,
+  "alt_sommet": 2970
+ },
+ {
+  "id": "meiringen-hasliberg",
+  "nom": "Meiringen-Hasliberg",
+  "canton": "BE",
+  "lat": 46.731,
+  "lon": 8.187,
+  "alt_base": 1061,
+  "alt_sommet": 2245
+ },
+ {
+  "id": "engelberg-titlis",
+  "nom": "Engelberg-Titlis",
+  "canton": "OW",
+  "lat": 46.821,
+  "lon": 8.401,
+  "alt_base": 1050,
+  "alt_sommet": 3020
+ },
+ {
+  "id": "sorenberg",
+  "nom": "Sörenberg",
+  "canton": "LU",
+  "lat": 46.822,
+  "lon": 8.037,
+  "alt_base": 1166,
+  "alt_sommet": 2350
+ },
+ {
+  "id": "andermatt-sedrun",
+  "nom": "Andermatt-Sedrun",
+  "canton": "UR",
+  "lat": 46.635,
+  "lon": 8.594,
+  "alt_base": 1444,
+  "alt_sommet": 2961
+ },
+ {
+  "id": "hoch-ybrig",
+  "nom": "Hoch-Ybrig",
+  "canton": "SZ",
+  "lat": 47.023,
+  "lon": 8.802,
+  "alt_base": 1050,
+  "alt_sommet": 1856
+ },
+ {
+  "id": "flumserberg",
+  "nom": "Flumserberg",
+  "canton": "SG",
+  "lat": 47.093,
+  "lon": 9.274,
+  "alt_base": 1220,
+  "alt_sommet": 2222
+ },
+ {
+  "id": "laax-flims",
+  "nom": "Laax-Flims",
+  "canton": "GR",
+  "lat": 46.81,
+  "lon": 9.258,
+  "alt_base": 1100,
+  "alt_sommet": 3018
+ },
+ {
+  "id": "obersaxen-mundaun",
+  "nom": "Obersaxen-Mundaun",
+  "canton": "GR",
+  "lat": 46.746,
+  "lon": 9.093,
+  "alt_base": 1200,
+  "alt_sommet": 2310
+ },
+ {
+  "id": "disentis",
+  "nom": "Disentis",
+  "canton": "GR",
+  "lat": 46.704,
+  "lon": 8.852,
+  "alt_base": 1130,
+  "alt_sommet": 3000
+ },
+ {
+  "id": "arosa-lenzerheide",
+  "nom": "Arosa-Lenzerheide",
+  "canton": "GR",
+  "lat": 46.718,
+  "lon": 9.567,
+  "alt_base": 1230,
+  "alt_sommet": 2865
+ },
+ {
+  "id": "davos-klosters",
+  "nom": "Davos-Klosters",
+  "canton": "GR",
+  "lat": 46.802,
+  "lon": 9.836,
+  "alt_base": 1124,
+  "alt_sommet": 2844
+ },
+ {
+  "id": "savognin",
+  "nom": "Savognin",
+  "canton": "GR",
+  "lat": 46.597,
+  "lon": 9.598,
+  "alt_base": 1200,
+  "alt_sommet": 2713
+ },
+ {
+  "id": "st-moritz",
+  "nom": "St. Moritz",
+  "canton": "GR",
+  "lat": 46.498,
+  "lon": 9.839,
+  "alt_base": 1772,
+  "alt_sommet": 3303
+ },
+ {
+  "id": "diavolezza-lagalb",
+  "nom": "Diavolezza-Lagalb",
+  "canton": "GR",
+  "lat": 46.41,
+  "lon": 9.97,
+  "alt_base": 2093,
+  "alt_sommet": 2978
+ },
+ {
+  "id": "scuol",
+  "nom": "Scuol",
+  "canton": "GR",
+  "lat": 46.797,
+  "lon": 10.298,
+  "alt_base": 1250,
+  "alt_sommet": 2783
+ },
+ {
+  "id": "samnaun",
+  "nom": "Samnaun",
+  "canton": "GR",
+  "lat": 46.944,
+  "lon": 10.36,
+  "alt_base": 1840,
+  "alt_sommet": 2872
+ }
+]
