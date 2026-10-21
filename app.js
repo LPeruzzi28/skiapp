@@ -212,34 +212,50 @@ async function afficherWebcams(s, el) {
     return;
   }
   if (!cams.length) return;
-  el.replaceChildren(...cams.map(w => {
+
+  const defile = document.createElement("div");
+  defile.className = "cams-defile";
+  const vus = new Set();
+  for (const w of cams) {
+    // Windy préfixe le titre par la commune (« Val de Bagnes: Verbier ») : on garde la fin.
+    const titre = w.title.split(": ").pop();
+    if (vus.has(titre)) continue;
+    vus.add(titre);
+
     const bouton = document.createElement("button");
     bouton.type = "button";
     bouton.className = "cam";
     const img = document.createElement("img");
-    img.src = w.images.current.preview;
-    img.alt = w.title;
+    img.alt = titre;
     img.loading = "lazy";
+    img.addEventListener("load", () => bouton.classList.add("prete"));
+    // Image expirée ou cassée : on retire la vignette, et le bandeau s'il ne reste rien.
+    img.addEventListener("error", () => {
+      bouton.remove();
+      if (!defile.children.length) el.hidden = true;
+    });
+    img.src = w.images.current.preview;
     const legende = document.createElement("span");
-    legende.textContent = w.title;
+    legende.textContent = titre;
     bouton.append(img, legende);
-    bouton.addEventListener("click", () => ouvrirCam(w));
-    return bouton;
-  }));
+    bouton.addEventListener("click", () => ouvrirCam(w, titre));
+    defile.append(bouton);
+  }
   const credit = document.createElement("p");
   credit.className = "cam-credit";
-  credit.innerHTML = `📷 Webcams <a href="https://www.windy.com/" target="_blank" rel="noopener">Windy.com</a>`;
-  el.append(credit);
+  credit.innerHTML = `Webcams <a href="https://www.windy.com/" target="_blank" rel="noopener">Windy.com</a> · glisse pour en voir plus`;
+  if (defile.children.length < 2) credit.innerHTML = `Webcam <a href="https://www.windy.com/" target="_blank" rel="noopener">Windy.com</a>`;
+  el.replaceChildren(defile, credit);
   el.hidden = false;
 }
 
-function ouvrirCam(w) {
+function ouvrirCam(w, titre) {
   const v = document.getElementById("visionneuse");
   v.querySelector("img").src = w.images.current.preview;
   const maj = w.lastUpdatedOn
     ? " · " + new Date(w.lastUpdatedOn).toLocaleString("fr-CH", { weekday: "short", hour: "2-digit", minute: "2-digit" })
     : "";
-  v.querySelector("figcaption").textContent = w.title + maj;
+  v.querySelector("figcaption").textContent = titre + maj;
   v.hidden = false;
 }
 document.getElementById("visionneuse").addEventListener("click", e => { e.currentTarget.hidden = true; });

@@ -47,7 +47,7 @@ body {
 main { padding: 0 16px; max-width: 900px; margin: 0 auto; }
 h2 { font-size: 1.05rem; margin: 20px 0 10px; }
 .vide { color: var(--doux); font-size: .9rem; margin: 0; }
-.liste { display: grid; gap: 12px; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); }
+.liste { display: grid; gap: 12px; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); align-items: start; }
 .station {
   background: var(--carte); border: 1px solid var(--bord);
   border-radius: 14px; padding: 12px;
@@ -123,19 +123,26 @@ footer a { color: var(--accent); }
 .leaflet-tooltip.etiquette { font-weight: 600; font-size: .7rem; padding: 1px 5px; }
 
 /* Webcams */
-.cams-liste {
-  display: flex; gap: 6px; overflow-x: auto; margin: 10px -12px 0; padding: 0 12px;
-  scroll-snap-type: x mandatory; scrollbar-width: none;
+.cams-liste { margin-top: 10px; }
+.cams-defile {
+  display: flex; gap: 8px; overflow-x: auto; scroll-snap-type: x mandatory;
+  scrollbar-width: none; border-radius: 10px;
 }
-.cams-liste::-webkit-scrollbar { display: none; }
+.cams-defile::-webkit-scrollbar { display: none; }
 .cam {
-  flex: 0 0 72%; scroll-snap-align: start; border: 0; padding: 0; background: none;
-  text-align: left; color: var(--texte); cursor: zoom-in; font: inherit;
+  flex: 0 0 82%; scroll-snap-align: start; border: 0; padding: 0; background: none;
+  text-align: left; color: var(--texte); cursor: zoom-in; font: inherit; min-width: 0;
 }
-.cams-liste .cam:only-of-type { flex-basis: 100%; }
-.cam img { width: 100%; aspect-ratio: 16 / 9; object-fit: cover; border-radius: 10px; background: var(--fond); display: block; }
-.cam span { display: block; font-size: .7rem; color: var(--doux); margin-top: 2px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.cam-credit { flex: 0 0 auto; align-self: center; margin: 0; font-size: .7rem; color: var(--doux); writing-mode: vertical-rl; }
+.cam:only-child { flex-basis: 100%; }
+.cam img {
+  width: 100%; aspect-ratio: 16 / 9; object-fit: cover; border-radius: 10px; display: block;
+  background: linear-gradient(110deg, var(--fond) 30%, var(--bord) 50%, var(--fond) 70%) 0 0 / 200% 100%;
+  animation: attente 1.2s linear infinite; opacity: .6; transition: opacity .3s;
+}
+.cam.prete img { animation: none; opacity: 1; background: var(--fond); }
+@keyframes attente { to { background-position: -200% 0; } }
+.cam span { display: block; font-size: .72rem; color: var(--doux); margin-top: 4px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.cam-credit { margin: 4px 0 0; font-size: .68rem; color: var(--doux); }
 .cam-credit a { color: var(--accent); }
 .visionneuse {
   position: fixed; inset: 0; z-index: 10; background: rgba(0,0,0,.85);
